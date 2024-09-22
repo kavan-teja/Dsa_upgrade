@@ -61,4 +61,4 @@ public class binarytreepostdemo {
             inorderTraversal(node.right);
         }
     }
-}
+}   
