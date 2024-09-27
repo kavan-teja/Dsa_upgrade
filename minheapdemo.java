@@ -1,103 +1,112 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
-class MinHeap {
-    private ArrayList<Integer> heap;
+public class minheapdemo {
+    private int[] heap;
+    private int size;
+    private int capacity;
 
-    public MinHeap() {
-        heap = new ArrayList<>();
+    public minheapdemo(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        this.heap = new int[capacity];
+    }
+
+    private int parent(int i) {
+        return (i - 1) / 2;
+    }
+
+    private int leftChild(int i) {
+        return 2 * i + 1;
+    }
+
+    private int rightChild(int i) {
+        return 2 * i + 2;
     }
 
     private void swap(int i, int j) {
-        int temp = heap.get(i);
-        heap.set(i, heap.get(j));
-        heap.set(j, temp);
+        int temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
     }
 
-    private void heapifyUp(int index) {
-        int parent = (index - 1) / 2;
-        if (index > 0 && heap.get(index) < heap.get(parent)) {
-            swap(index, parent);
-            heapifyUp(parent);
-        }
-    }
-
-    private void heapifyDown(int index) {
-        int minIndex = index;
-        int left = 2 * index + 1;
-        int right = 2 * index + 2;
-
-        if (left < heap.size() && heap.get(left) < heap.get(minIndex)) {
-            minIndex = left;
+    public void insert(int key) {
+        if (size == capacity) {
+            System.out.println("Heap is full. Cannot insert.");
+            return;
         }
 
-        if (right < heap.size() && heap.get(right) < heap.get(minIndex)) {
-            minIndex = right;
-        }
+        size++;
+        int i = size - 1;
+        heap[i] = key;
 
-        if (minIndex != index) {
-            swap(index, minIndex);
-            heapifyDown(minIndex);
+        while (i != 0 && heap[parent(i)] > heap[i]) {
+            swap(i, parent(i));
+            i = parent(i);
         }
-    }
-
-    public void insert(int value) {
-        heap.add(value);
-        heapifyUp(heap.size() - 1);
     }
 
     public int deleteMin() {
-        if (heap.isEmpty()) {
-            throw new IllegalStateException("Heap is empty");
+        if (size <= 0) {
+            System.out.println("Heap is empty. Cannot delete.");
+            return -1;
+        }
+        if (size == 1) {
+            size--;
+            return heap[0];
         }
 
-        int min = heap.get(0);
-        int lastElement = heap.remove(heap.size() - 1);
+        int root = heap[0];
+        heap[0] = heap[size - 1];
+        size--;
+        minHeapify(0);
 
-        if (!heap.isEmpty()) {
-            heap.set(0, lastElement);
-            heapifyDown(0);
+        return root;
+    }
+
+    private void minHeapify(int i) {
+        int l = leftChild(i);
+        int r = rightChild(i);
+        int smallest = i;
+
+        if (l < size && heap[l] < heap[smallest])
+            smallest = l;
+        if (r < size && heap[r] < heap[smallest])
+            smallest = r;
+
+        if (smallest != i) {
+            swap(i, smallest);
+            minHeapify(smallest);
         }
-
-        return min;
     }
 
     public void printHeap() {
-        System.out.println(heap);
+        for (int i = 0; i < size; i++) {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
     }
 
-    public boolean isEmpty() {
-        return heap.isEmpty();
-    }
-}
-
-public class minheapdemo {
     public static void main(String[] args) {
-        MinHeap minHeap = new MinHeap();
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the capacity of the heap: ");
+        int capacity = scanner.nextInt();
+        minheapdemo minHeap = new minheapdemo(capacity);
 
         while (true) {
-            System.out.println("\n1. Insert");
-            System.out.println("2. Delete minimum");
-            System.out.println("3. Print heap");
-            System.out.println("4. Exit");
+            System.out.println("\n1. Insert\n2. Delete Min\n3. Print Heap\n4. Exit");
             System.out.print("Enter your choice: ");
-
             int choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter value to insert: ");
-                    int value = scanner.nextInt();
-                    minHeap.insert(value);
-                    System.out.println("Inserted " + value);
+                    System.out.print("Enter the element to insert: ");
+                    int element = scanner.nextInt();
+                    minHeap.insert(element);
                     break;
                 case 2:
-                    if (!minHeap.isEmpty()) {
-                        int min = minHeap.deleteMin();
-                        System.out.println("Deleted minimum: " + min);
-                    } else {
-                        System.out.println("Heap is empty");
+                    int min = minHeap.deleteMin();
+                    if (min != -1) {
+                        System.out.println("Deleted min element: " + min);
                     }
                     break;
                 case 3:
@@ -107,12 +116,10 @@ public class minheapdemo {
                 case 4:
                     System.out.println("Exiting...");
                     scanner.close();
-                    return;
+                    System.exit(0);
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
         }
     }
 }
-    
-
