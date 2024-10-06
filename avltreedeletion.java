@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class AVLTree {
+class avltreedeletion {
 
     // Node class
     class Node {
@@ -56,7 +56,6 @@ class AVLTree {
         return y;
     }
 
-    // Get balance factor of node N
     int getBalance(Node N) {
         if (N == null)
             return 0;
@@ -205,7 +204,7 @@ class AVLTree {
 
     // Main function to interact with the user and perform deletions
     public static void main(String[] args) {
-        AVLTree tree = new AVLTree();
+        avltreedeletion tree = new avltreedeletion();
         Scanner sc = new Scanner(System.in);
 
         // Insert nodes

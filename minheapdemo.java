@@ -45,6 +45,22 @@ public class minheapdemo {
         }
     }
 
+    private void minHeapify(int i) {
+        int l = leftChild(i);
+        int r = rightChild(i);
+        int smallest = i;
+
+        if (l < size && heap[l] < heap[smallest])
+            smallest = l;
+        if (r < size && heap[r] < heap[smallest])
+            smallest = r;
+
+        if (smallest != i) {
+            swap(i, smallest);
+            minHeapify(smallest);
+        }
+    }
+
     public int deleteMin() {
         if (size <= 0) {
             System.out.println("Heap is empty. Cannot delete.");
@@ -63,21 +79,7 @@ public class minheapdemo {
         return root;
     }
 
-    private void minHeapify(int i) {
-        int l = leftChild(i);
-        int r = rightChild(i);
-        int smallest = i;
-
-        if (l < size && heap[l] < heap[smallest])
-            smallest = l;
-        if (r < size && heap[r] < heap[smallest])
-            smallest = r;
-
-        if (smallest != i) {
-            swap(i, smallest);
-            minHeapify(smallest);
-        }
-    }
+    
 
     public void printHeap() {
         for (int i = 0; i < size; i++) {
